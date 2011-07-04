@@ -22,6 +22,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+# To make sorting faster, we only want to chunkify each element once. We do
+# that by using the Schwartzian transform idiom:
+# http://en.wikipedia.org/wiki/Schwartzian_transform
+#
+# @sorted = map  { $_->[0] }
+#           sort { $a->[1] cmp $b->[1] }
+#           map  { [$_, foo($_)] }
+#                @unsorted;
 
 #
 # TODO: Make decimal points be considered in the same class as digits
@@ -31,9 +39,12 @@
 #my @sorted = sort { alphanum($a,$b) } @strings;
 
 sub alphanum {
-  # split strings into chunks
-  my $a = chunkify($_[0]);
-  my $b = chunkify($_[1]);
+  my ($a, $b) = @_;
+  return alphanum_compare_chunks(chunkify($a), chunkify($b));
+}
+
+sub alphanum_compare_chunks {
+  my ($a, $b) = @_;
   my $a_index = 0;
   my $b_index = 0;
   
