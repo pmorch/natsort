@@ -16,8 +16,21 @@ sub sortSub {
     return alphanum($a, $b);
 }
 
-my $begin = time;
-my @b = sort sortSub @array;
-my $end = time;
+my ($begin, $end);
+
+$begin = time;
+my @sorted = sort sortSub @array;
+$end = time;
 printf "%d elements, %d comparisons took %fs\n",
+    $numElements, $numCmp, ($end-$begin);
+
+
+# Schwartzian transform:
+$begin = time;
+@sorted = map  { $_->[0] }
+          sort { alphanum_compare_chunks($a->[1], $b->[1]) }
+          map  { [$_, chunkify($_)] }
+               @array;
+$end = time;
+printf "Schwartzian: %d elements, %d comparisons took %fs\n",
     $numElements, $numCmp, ($end-$begin);
