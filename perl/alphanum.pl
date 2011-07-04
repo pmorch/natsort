@@ -34,11 +34,13 @@ sub alphanum {
   # split strings into chunks
   my $a = chunkify($_[0]);
   my $b = chunkify($_[1]);
+  my $a_index = 0;
+  my $b_index = 0;
   
   # while we have chunks to compare.
-  while (@$a && @$b) {
-    my $a_chunk = shift @$a;
-    my $b_chunk = shift @$b;
+  while ($a->[$a_index] && $b->[$b_index]) {
+    my $a_chunk = $a->[$a_index++];
+    my $b_chunk = $b->[$b_index++];
     
     my $test =
         (($a_chunk =~ /\d/) && ($b_chunk =~ /\d/)) ? # if both are numeric
