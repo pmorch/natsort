@@ -34,3 +34,12 @@ $begin = time;
 $end = time;
 printf "Schwartzian: %d elements, %d comparisons took %fs\n",
     $numElements, $numCmp, ($end-$begin);
+
+$begin = time;
+@sorted = map  { $_->[0] }
+          sort { $a->[1] cmp $b->[1] }
+          map  { [$_, chunkify_string($_)] }
+               @array;
+$end = time;
+printf "Schwartzian (string cmp): %d elements, %d comparisons took %fs\n",
+    $numElements, $numCmp, ($end-$begin);
