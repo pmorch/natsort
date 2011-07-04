@@ -32,13 +32,13 @@
 
 sub alphanum {
   # split strings into chunks
-  my @a = chunkify($_[0]);
-  my @b = chunkify($_[1]);
+  my $a = chunkify($_[0]);
+  my $b = chunkify($_[1]);
   
   # while we have chunks to compare.
-  while (@a && @b) {
-    my $a_chunk = shift @a;
-    my $b_chunk = shift @b;
+  while (@$a && @$b) {
+    my $a_chunk = shift @$a;
+    my $b_chunk = shift @$b;
     
     my $test =
         (($a_chunk =~ /\d/) && ($b_chunk =~ /\d/)) ? # if both are numeric
@@ -50,7 +50,7 @@ sub alphanum {
   }
 
   # return longer string.
-  return @a <=> @b;
+  return @$a <=> @$b;
 }
 
 # split on numeric/non-numeric transitions
@@ -61,6 +61,6 @@ sub chunkify {
       (?<=\d)\D # non-digit preceded by a digit
     )
   }x, $_[0];
-  return @chunks;
+  return \@chunks;
 }
 
