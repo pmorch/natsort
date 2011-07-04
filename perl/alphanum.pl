@@ -77,3 +77,13 @@ sub chunkify {
   return \@chunks;
 }
 
+sub chunkify_string {
+  my $chunks = chunkify($_[0]);
+  return join("", map {
+    if (/\d/) {
+        sprintf "%032.16f", $_;
+    } else {
+        $_;
+    }
+  } @$chunks);
+}
