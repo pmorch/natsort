@@ -14,7 +14,6 @@ my $numCmp = 0;
 sub sortSub {
     $numCmp++;
     return alphanum($a, $b);
-    return $a cmp $b;
 }
 
 my $begin = time;
