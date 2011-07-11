@@ -2,7 +2,8 @@
 use strict;
 use Time::HiRes qw(time);
 
-do "alphanum.pl";
+use lib 'lib';
+use Sort::Alphanum;
 
 scalar @ARGV == 1
     or die "Usage: $0 <number of array elements>";
@@ -13,7 +14,7 @@ my @array = map { 'a' . int(rand($numElements)) } (1..$numElements);
 my $numCmp = 0;
 sub sortSub {
     $numCmp++;
-    return alphanum($a, $b);
+    return Sort::Alphanum::cmp($a, $b);
 }
 
 my ($begin, $end);
@@ -28,8 +29,8 @@ printf "%d elements, %d comparisons took %fs\n",
 # Schwartzian transform:
 $begin = time;
 @sorted = map  { $_->[0] }
-          sort { alphanum_compare_chunks($a->[1], $b->[1]) }
-          map  { [$_, chunkify($_)] }
+          sort { Sort::Alphanum::alphanum_compare_chunks($a->[1], $b->[1]) }
+          map  { [$_, Sort::Alphanum::chunkify($_)] }
                @array;
 $end = time;
 printf "Schwartzian: %d elements, %d comparisons took %fs\n",
@@ -38,7 +39,7 @@ printf "Schwartzian: %d elements, %d comparisons took %fs\n",
 $begin = time;
 @sorted = map  { $_->[0] }
           sort { $a->[1] cmp $b->[1] }
-          map  { [$_, chunkify_string($_)] }
+          map  { [$_, Sort::Alphanum::chunkify_string($_)] }
                @array;
 $end = time;
 printf "Schwartzian (string cmp): %d elements, %d comparisons took %fs\n",
