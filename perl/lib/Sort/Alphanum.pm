@@ -1,3 +1,5 @@
+package Sort::Alphanum;
+
 #
 # The Alphanum Algorithm is an improved sorting algorithm for strings
 # containing numbers.  Instead of sorting numbers in ASCII order like
@@ -5,7 +7,8 @@
 #
 # The Alphanum Algorithm is discussed at http://www.DaveKoelle.com
 #
-
+# Peter V. Mørch (http://www.morch.com) took alphanum.pl from
+# http://www.DaveKoelle.com and modified it into what you're seeing here.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -30,15 +33,17 @@
 #           sort { $a->[1] cmp $b->[1] }
 #           map  { [$_, foo($_)] }
 #                @unsorted;
-
+#
 #
 # TODO: Make decimal points be considered in the same class as digits
 #
-
+#
 # usage:
-#my @sorted = sort { alphanum($a,$b) } @strings;
+#
+#     use Sort::Alphanum;
+#     my @sorted = sort { Sort::Alphanum::cmp($a,$b) } @strings;
 
-sub alphanum {
+sub cmp {
   my ($a, $b) = @_;
   return alphanum_compare_chunks(chunkify($a), chunkify($b));
 }
@@ -87,3 +92,5 @@ sub chunkify_string {
     }
   } @$chunks);
 }
+
+1;
